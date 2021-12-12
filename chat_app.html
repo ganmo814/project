@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="chat_app.css">
+<title>Chatアプリ</title>
+</head>
+<body>
+
+<!-- コンテンツ表示画面 -->
+
+<header>
+    <h1 class="title1">LINE風チャットアプリ</h1></span>
+
+
+</header>
+
+
+<!-- div>div*3 -->
+<main>
+    <div id="output"></div>
+    <div id="input">
+        名前<br><input type="text" id="uname">
+    </div>
+    <div id="input">
+        メッセージ<br>
+        <textarea id="text" cols="50" rows="5"></textarea><br>
+        <button id="send">送信</button>
+    </div>
+</main>
+
+<!--/ コンテンツ表示画面 -->
+
+
+
+<!-- JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- JQuery -->
+
+
+<!--** 以下Firebase **-->
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+    import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved }
+        from "https://cdnjs.cloudflare.com/ajax/libs/firebase/9.6.0/firebase-database.min.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "",
+      authDomain: "gsapp-8bef4.firebaseapp.com",
+      projectId: "gsapp-8bef4",
+      storageBucket: "gsapp-8bef4.appspot.com",
+      messagingSenderId: "717858571626",
+      appId: "1:717858571626:web:a25dfd9e91edb59c4d9113"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+
+    const db = getDatabase(app);
+    const dbRef = ref(db, "chat");
+
+    $("#send").on("click", function(){
+        const uname = $("#uname").val();
+        const text = $("#text").val();
+        const msg = {
+            uname: uname,
+            text: text
+        };
+        // keyとvalueが同じであればconst msg {uname, text}でも良い
+        // console.log(msg);
+        const newPostRef = push(dbRef);
+        // console.log(newPostRef);
+        set(newPostRef, msg);
+        
+        $("input,textarea").val("");
+    });
+
+    $("#text").on("keydown", function(e){
+        // console.log(e);
+        if (event.ctrlKey){
+            if (e.keyCode === 13 && $(this).val()){
+                const uname = $("#uname").val();
+                const text = $("#text").val();
+                const msg = {
+                    uname: uname,
+                    text: text
+                };
+                    const newPostRef = push(dbRef);
+                    // console.log(newPostRef);
+                    set(newPostRef, msg);
+                    $("input,textarea").val("");
+            };
+        };
+    });
+
+    onChildAdded(dbRef, function(data){
+        const msg = data.val();
+        const key = data.key;
+        // console.log(msg);
+        let h = '<div class="uname">';
+            h += msg.uname;
+            h += "</div>";
+            h +='<div class="delete"><div class="msg">';
+            h += msg.text;
+            h += "</div>";
+            h += '<button id="'
+            h += key;
+            h += '">削除</button>';
+            h += "</div>"
+            $("#output").append(h);
+
+            $('#' + key).on('click', function(){
+            remove(ref(db,"chat/" + key));
+            $('#' + key).remove();
+            location.reload();
+        });
+    });   
+
+</script>
+
+
+</body>
+</html>

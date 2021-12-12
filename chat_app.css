@@ -1,0 +1,67 @@
+
+header{
+    height: 80px;
+    width: 100%;
+    background-color: #273246;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1{
+    margin: 0px;
+    font-size: 24px;
+    color: white;
+}
+
+main{
+    background-color: #7494c0;
+
+}
+
+#output{
+    height: 400px;
+    overflow-y: scroll;
+    padding: 10px;
+}
+
+#input{    
+    margin: 0 25%;
+}
+
+#text,#uname{
+    width: 400px;
+    border-radius: 10px;
+    border-width: 2px;
+    margin-bottom: 10px;
+    background-color: white;
+    border-color: white;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.uname{
+    margin-top: 15px;
+}
+
+.msg{
+    background-color: white;
+    border-radius: 15px;
+    padding: 1px 15px 1px 10px;
+    margin-right: 8px;
+    max-width: 50%;
+}
+
+.delete{
+    display: flex;
+}
+
+button{
+    background-color: darkgray;
+    color: white;
+    border-radius: 10px;
+}
+
+#send{   
+    margin-bottom: 15px;
+
+}
